@@ -1,0 +1,62 @@
+시청 영상 
+youtube.com/watch?v=9jrA-szasTI
+https://youtu.be/4x1QRyMIjGU?si=gtGHnqaK8fd54kdt
+
+
+Spring AI ( https://www.slog.gg/p/14914 )
+
+- 호환성 보증
+- 내부적으로 코드를 몰라도  JAVA 코드로 모든 기능을 대체한다.
+
+단점 : 
+    - 성능
+    - 최신 모델에 대한 호환
+     
+
+        implementation("org.springframework.boot:spring-boot-starter-webmvc")
+	implementation("org.springframework.boot:spring-boot-starter-webflux")
+	implementation("org.springframework.ai:spring-ai-starter-model-ollama")
+	implementation("org.springframework.ai:spring-ai-starter-model-openai")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-webtestclient")
+	implementation(platform("org.springframework.ai:spring-ai-bom:2.0.1"))	
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+
+ChatClient: Spring AI의 AI 모델 통합을 위한 고수준 API - AI모델 통합을 위한 코드레벨에서 사용할 수 있는 최상위 인터페이스
+ChatModel: AI 모델과의 저수준 통신을 담당 -> 인터페이스를 기준으로 실제 모델에 접근
+
+UserMessage: 사용자 입력 메시지를 나타내는 클래스
+
+
+
+Ollama 컨테이너 실행 및 모델 설치
+# 컨테이너 내부에서 모델 다운로드
+# 컴퓨터 자원에 맞는 모델 선택:
+# - llama3 (8B): 약 4.7GB, 8GB+ RAM 권장
+# - gemma:2b: 약 1.7GB, 4GB+ RAM 권장 (가벼운 모델)
+# - phi3: 약 2.2GB, 4GB+ RAM 권장 (가벼운 모델)
+docker compose exec ollama ollama pull llama3
+docker compose exec ollama ollama pull gemma:2b
+docker compose exec ollama ollama pull phi3
+
+# - qwen2.5:0.5b (0.5B): 약 398MB, 2GB+ RAM 권장 (초경량, 기본 연동 테스트 추천)
+# - tinyllama (1.1B): 약 637MB, 2GB+ RAM 권장 (초경량 채팅 모델)
+# - gemma3:1b (1B): 약 815MB, 4GB+ RAM 권장 (경량 모델)
+# - qwen2.5:1.5b (1.5B): 약 986MB, 4GB+ RAM 권장 (한국어 채팅 추천)
+
+docker compose exec ollama ollama pull qwen2.5:0.5b
+docker compose exec ollama ollama pull tinyllama
+> docker compose exec ollama ollama pull gemma3:1b
+docker compose exec ollama ollama pull qwen2.5:1.5b
+
+
+
+
+
+AIController 를 보면
+Flux<String> 를 반환함. -> webmvc [tomcat] / webflux [netty]
+
+
+- Spring AI 주 사용처
+챗봇, 추천알고리즘, 검색, 내부자료 검색 챗 봇, 문서 기반 Q&A (RAG), 에이전트 / 도구 호출 등

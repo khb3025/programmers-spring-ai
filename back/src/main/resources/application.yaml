@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: Back
+  config:
+    import: optional:file:.env[.properties]
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/${DATABASE_NAME:faqdb}
+#    username: ${DATABASE_USERNAME:faq}
+#    password: ${DATABASE_PASSWORD:faq123}
+#    driver-class-name: org.postgresql.Driver
+#  jpa:
+#    hibernate:
+#      ddl-auto: update
+#    properties:
+#      hibernate:
+#        format_sql: true
+#        show_sql: true
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/${DATABASE_NAME:faqdb}
+    username: ${DATABASE_USERNAME:faq}
+    password: ${DATABASE_PASSWORD:faq123}
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
