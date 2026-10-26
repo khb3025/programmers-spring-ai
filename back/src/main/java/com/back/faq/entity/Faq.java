@@ -23,11 +23,11 @@ public class Faq {
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @Column(nullable = false, length = 500)
-    @Column("question")
+    // @Column(nullable = false, length = 500) -> R2DBC 는 DDL 기능이 없음으로 자료형 정의가 의미 없음
+    // @Column("question") -> 어차피 쿼리를 작성하여 테이블을 생성함으로 크게 의미 없음.
     private String question;
 
     // @Column(nullable = false, length = 2000)
-    @Column("answer")
+    // @Column("answer")
     private String answer;
 }

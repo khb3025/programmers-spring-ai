@@ -3,6 +3,21 @@ spring:
     name: Back
   config:
     import: optional:file:.env[.properties]
+
+  r2dbc:
+    url: r2dbc:postgresql://localhost:5432/${DATABASE_NAME:faqdb}
+    username: ${DATABASE_USERNAME:faq}
+    password: ${DATABASE_PASSWORD:faq123}
+
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+
+  sql:
+    init:
+      mode: always # 내장 DB가 아니어도 항상 스키마 파일 실행
+      schema-locations: classpath:schema/faq-schema.sql
+
 #  datasource:
 #    url: jdbc:postgresql://localhost:5432/${DATABASE_NAME:faqdb}
 #    username: ${DATABASE_USERNAME:faq}
@@ -15,11 +30,3 @@ spring:
 #      hibernate:
 #        format_sql: true
 #        show_sql: true
-  r2dbc:
-    url: r2dbc:postgresql://localhost:5432/${DATABASE_NAME:faqdb}
-    username: ${DATABASE_USERNAME:faq}
-    password: ${DATABASE_PASSWORD:faq123}
-
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY}

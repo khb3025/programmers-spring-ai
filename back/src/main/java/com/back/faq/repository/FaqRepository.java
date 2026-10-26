@@ -26,6 +26,6 @@ public interface FaqRepository extends R2dbcRepository<Faq, Long> {
         WHERE pgroonga_match_text(question, :keyword)
            OR pgroonga_match_text(answer, :keyword)
         """)
-    Flux<Faq> searchByKeyword(String keyword);
+    Flux<Faq> searchByKeyword(@Param("keyword") String keyword);
 
 }
