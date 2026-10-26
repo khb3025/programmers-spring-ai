@@ -29,6 +29,8 @@ class ProductServiceTests {
 
     // Elasticsearch 9.x는 벡터를 _source에서 빼고 저장한다. 그래서 조회하면 embedding이 null로 보인다.
     // 벡터가 색인되었는지는 exists 쿼리로 확인한다.
+    // 결론 : elasticsearch의 _source를 알아야함. Kibana /product/search/{id}
+    // ElasticSearchRepository로는 벡터를 알수 없음.
     private boolean hasEmbedding(Long id) {
         NativeQuery query = NativeQuery.builder()
                 .withQuery(q -> q.bool(b -> b

@@ -12,3 +12,5 @@ RAG 검색 증강 생성
 2강 - Product, ProductKeyword 엔티티 (1:N 연관관계)
 3강 - Docker 컨테이너 생성( Postgres /  elasticSearch / ollama )
 4강 - Spring AI 의존성 / 프로필별 모델 설정 / 384차원 임베딩
+        AiConfig -> 테스트 환경(Ollama)에서의 차원 설정
+
