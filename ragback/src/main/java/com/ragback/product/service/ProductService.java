@@ -3,6 +3,7 @@ package com.ragback.product.service;
 import co.elastic.clients.elasticsearch._types.KnnSearch;
 import com.ragback.product.document.ProductDocument;
 import com.ragback.product.entity.Product;
+import com.ragback.product.entity.ProductKeyword;
 import com.ragback.product.repository.ProductDocumentRepository;
 import com.ragback.product.repository.ProductRepository;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -77,6 +78,32 @@ public class ProductService {
     public List<Product> knnSearch(String query, int k) {
         float[] queryVector = embeddingModel.embed(query);
         return findProductsByVector(queryVector, k);
+    }
+
+    // 여러 키워드를 각각 임베딩한 뒤 평균 벡터로 검색한다 (상품 벡터를 만드는 방식과 같다)
+    public List<Product> knnSearch(List<String> keywords, int k) {
+        if (keywords == null || keywords.isEmpty()) {
+            return List.of();
+        }
+        float[] queryVector = calculateAverage(embeddingModel.embed(keywords));
+        return findProductsByVector(queryVector, k);
+    }
+
+    // 기준 상품의 키워드로 검색하고, 1위로 나오는 기준 상품 자신은 뺀다
+    // (Elasticsearch 9.x는 저장한 벡터를 _source로 돌려주지 않으므로 키워드로 다시 임베딩한다)
+    @Transactional(readOnly = true)
+    public List<Product> findSimilarProducts(Long productId, int k) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product not found: " + productId));
+
+        List<String> keywords = product.getKeywords().stream()
+                .map(ProductKeyword::getKeyword)
+                .toList();
+
+        return knnSearch(keywords, k + 1).stream()
+                .filter(p -> !p.getId().equals(productId))
+                .limit(k)
+                .toList();
     }
 
     private List<Product> findProductsByVector(float[] queryVector, int k) {
