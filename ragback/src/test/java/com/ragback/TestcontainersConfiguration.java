@@ -5,6 +5,7 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.context.annotation.Bean;
 import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.DockerImageName;
+import org.testcontainers.elasticsearch.ElasticsearchContainer;
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
 
@@ -14,5 +15,14 @@ public class TestcontainersConfiguration {
 
         return new PostgreSQLContainer(DockerImageName.parse("postgres:17"));
 
+    }
+
+    @Bean
+    @ServiceConnection // spring.elasticsearch.uris 를 대신 채워 준다
+    ElasticsearchContainer elasticsearchContainer() {
+        return new ElasticsearchContainer(DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:9.2.3"))
+                .withEnv("xpack.security.enabled", "false") // 테스트용 : 인증·HTTPS 끔
+                .withEnv("discovery.type", "single-node")
+                .withEnv("ES_JAVA_OPTS", "-Xms512m -Xmx512m");
     }
 }

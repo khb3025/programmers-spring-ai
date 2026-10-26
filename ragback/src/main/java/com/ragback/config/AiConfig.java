@@ -1,5 +1,11 @@
 package com.ragback.config;
 
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.ollama.OllamaEmbeddingModel;
+import org.springframework.ai.ollama.api.OllamaApi;
+import org.springframework.ai.ollama.api.OllamaEmbeddingOptions;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -13,7 +19,7 @@ public class AiConfig {
     // 파라미터 이름(openAiChatModel)과 같은 이름의 빈이 주입된다.
     @Bean
     @Profile("default")
-    public ChatClient openaiChatClient(ChatModel openAiChatModel) {
+    public ChatClient openaiChatClient(org.springframework.ai.chat.model.ChatModel openAiChatModel) {
         return ChatClient.builder(openAiChatModel).build();
     }
 

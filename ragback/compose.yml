@@ -18,7 +18,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
   elasticsearch:
-    image: elasticsearch:9.2.3
+    image: elasticsearch:9.4.5
     environment:
       - discovery.type=single-node # 클러스터 없이 노드 하나로 실행
       - xpack.security.enabled=false # 로컬 개발용 : 인증·HTTPS 끔
